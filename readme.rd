@@ -13,3 +13,20 @@ f) Best solution is set a xxx.SomeUI (that's an executable project) as initial p
 g) Add a Reference to xxx.Domain and xxx.Data projects on xxx.SomeUI
 h) Add a Microsoft.EntityFrameworkCore.Design nuget package on xxx.SomeUI
 j) From Packager Manager, select again xxx.Data project and use 'add-migration initial' to create first migration.
+k) Type 'script-migration' to take a look SQL that EF will use to generate database.
+l) Usually, in development time 'update-database' is a valid option to generate the database. But in product mode, maybe the previous script generated in k) step could be useful. It depends.
+m) Because we're on developement mode, we use 'update-database -verbose' to create db
+n) Go to SQL Server exlorer and look for new created database. You will note, names had been pluralized automatically
+
+* Create a webapp project
+
+a) Add a xxx.Web ASP.Net core Web Application project, type Web Application MVC
+b) On previous step we have connection string hardcode in the code. On .net core, we can use Dependecy Injection and set connection string on settings.json file.
+c) On xxx.Data project, modify SamuariDbContext and add connection string into appsettings.json file(see changes on github)
+d) In this case, we don't use nuGet to get tha packages. Instead, we edit xxx.Web .csproj file and add a package that include all for develop
+
+<ItemGroup>
+<PackageReference Include="Microsoft.AspNetCore.All" />
+</ItemGroup>
+
+e) Add reference to xxx.Data and xxx.Domain projects
