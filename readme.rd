@@ -53,3 +53,25 @@ b) Be sure you're on xxx.Data project on Packacer Manager Console, run
 add-migration Add_ManyToMany_And_One_To_One_RelationShips -verbose
 
 c) update-datbase -verbose
+
+* Reverse engineering an existing database
+
+a) The goal is, create DBContext and related classes from Database
+b) Update model is currently not supported
+c) Transtion migrations are not easy
+d) Create a asp.net.core project (eg: App.ReverseEngineeringDB) and add next nuget packages:
+- Microsoft.EntityFrameworkCore
+- Microsoft.EntityFrameworkCore.Design
+- Microsoft.EntityFrameworkCore.Relational
+- Microsoft.EntityFrameworkCore.SqlServer
+
+e) We need to use scaffold-dbcontext (on Package Manager Console)
+- Help:
+get-help scaffold-dbcontext -detailed
+
+- On Package Manger console, make sure you select the App.ReverseEngineeringDB project and set as Start up project and run
+
+scaffold-dbcontext -provider Microsoft.EntityFrameworkCore.SqlServer -connection "Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=SamuraiAppData;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False"
+
+
+
