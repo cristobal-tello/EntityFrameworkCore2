@@ -73,5 +73,32 @@ get-help scaffold-dbcontext -detailed
 
 scaffold-dbcontext -provider Microsoft.EntityFrameworkCore.SqlServer -connection "Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=SamuraiAppData;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False"
 
+* Getting SQL logs
+
+- Add Microsoft.Extensions.Logging.Console packacge from nuGet
+- On DbContext, add
+
+public static readonly LoggerFactory MyConsoleLoggerFactory =
+            new LoggerFactory(
+                new[] {
+                    new ConsoleLoggerProvider((category, level)
+                        => 
+                    category == DbLoggerCategory.Database.Command.Name &&   // Only SQL Commands
+                    level == LogLevel.Information,  // Level of details
+                        true)    
+                });
+
+- And use it on OnConfiguring method
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder
+                .UseLoggerFactory(MyConsoleLoggerFactory)
+                ......
+        }
+
+
+
+
 
 

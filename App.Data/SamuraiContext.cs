@@ -1,20 +1,33 @@
 ﻿using App.Domain;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Console;
 
 namespace App.Data
 {
     public class SamuraiContext : DbContext
     {
+        public static readonly LoggerFactory MyConsoleLoggerFactory =
+            new LoggerFactory(
+                new[] {
+                    new ConsoleLoggerProvider((category, level)
+                        => 
+                    category == DbLoggerCategory.Database.Command.Name &&   // Only SQL Commands
+                    level == LogLevel.Information,  // Level of details
+                        true)    
+                });
 
         public SamuraiContext(DbContextOptions<SamuraiContext> options) : base(options)
         {
 
         }
 
-        /*protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Server = (localdb)\\mssqllocaldb; Database=SamuraiAppData; Trusted_Connection=True");
-        }*/
+            optionsBuilder
+                .UseLoggerFactory(MyConsoleLoggerFactory)
+                .UseSqlServer("Server = (localdb)\\mssqllocaldb; Database=SamuraiAppData; Trusted_Connection=True");
+        }
 
         public DbSet<Samurai> Samurais { get; set; }
         public DbSet<Quote> Quotes { get; set; }
