@@ -98,6 +98,12 @@ public static readonly LoggerFactory MyConsoleLoggerFactory =
         }
 
 
+- By default, value of parameters are not show on log, to enable, add 
+
+		optionsBuilder
+                .UseLoggerFactory(MyConsoleLoggerFactory)
+				.EnableSensitiveDataLogging(true)
+				...
 
 
 

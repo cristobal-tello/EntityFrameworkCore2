@@ -17,15 +17,16 @@ namespace App.Data
                         true)    
                 });
 
-        public SamuraiContext(DbContextOptions<SamuraiContext> options) : base(options)
+        /*public SamuraiContext(DbContextOptions<SamuraiContext> options) : base(options)
         {
 
-        }
+        }*/
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder
                 .UseLoggerFactory(MyConsoleLoggerFactory)
+                .EnableSensitiveDataLogging(true)
                 .UseSqlServer("Server = (localdb)\\mssqllocaldb; Database=SamuraiAppData; Trusted_Connection=True");
         }
 
