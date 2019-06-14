@@ -30,3 +30,26 @@ d) In this case, we don't use nuGet to get tha packages. Instead, we edit xxx.We
 </ItemGroup>
 
 e) Add reference to xxx.Data and xxx.Domain projects
+
+* When you need to add a new migration
+a) To avoid problems and be simplest, just comment the cctor in DbContext
+
+ /* 
+ public SamuraiContext(DbContextOptions<SamuraiContext> options) : base(options)
+{
+
+}
+*/
+
+and restore again 
+
+protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+{
+    optionsBuilder.UseSqlServer("Server = (localdb)\\mssqllocaldb; Database=SamuraiAppData; Trusted_Connection=True");
+}
+
+b) Be sure you're on xxx.Data project on Packacer Manager Console, run
+
+add-migration Add_ManyToMany_And_One_To_One_RelationShips -verbose
+
+c) update-datbase -verbose
