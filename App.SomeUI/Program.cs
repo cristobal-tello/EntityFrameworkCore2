@@ -1,6 +1,7 @@
 ﻿using App.Data;
 using App.Domain;
 using System;
+using System.Linq;
 
 namespace App.SomeUI
 {
@@ -8,9 +9,10 @@ namespace App.SomeUI
     {
         static void Main(string[] args)
         {
-            InsertSamurai();
-            InsertMultipleSamurais();
-            InsertMultipleDifferentObjets();
+            //InsertSamurai();
+            //InsertMultipleSamurais();
+            //InsertMultipleDifferentObjets();
+            SimpleSamuraiQuery();
             Console.WriteLine("Finsihed!!!!!");
             Console.ReadKey();
         }
@@ -52,6 +54,21 @@ namespace App.SomeUI
             {
                 context.Samurais.Add(samurai);
                 context.SaveChanges();
+            }
+        }
+
+        private static void SimpleSamuraiQuery()
+        {
+            using (var context = new SamuraiContext())
+            {
+                var samurais = context.Samurais/*.ToList()*/;   // No different noted .ToList vs nothing
+
+                // Don't use 'context.Samurais' in foreach. In some cases, potential performance probles.s Better get results First as we do here
+                // Why? Because the connection stays open until last result if fetched
+                foreach (var samurai in samurais)
+                {
+                    Console.WriteLine(samurai.Name);
+                }
             }
         }
     }
