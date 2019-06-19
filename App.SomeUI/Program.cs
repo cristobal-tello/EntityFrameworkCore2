@@ -18,10 +18,63 @@ namespace App.SomeUI
             //MoreQueries();
             //RetrieveAndUpdateSamurai();
             //RetrieveAndUpdateMultipleSamurais();
-            InsertBattle();
-            QueryAndUpdateBattle_Disconnected();
+            //InsertBattle();
+            //QueryAndUpdateBattle_Disconnected();
+            AddSomeMoreSamurais();
+            DeleteWhileTracked();
+            DeleteWhileNotTracked();
+            DeleteMany();
+            DeleteUsingId(3);   // Make sure there is a valid id on database
             Console.WriteLine("Finsihed!!!!!");
             Console.ReadKey();
+        }
+
+        private static void DeleteUsingId(int samuraiId)
+        {
+            // Only we need the id if we need delete an object
+            // But this is not efficient, 2 trips to database, but right now this is the only way
+            // You can use an store procedure
+            // _context.Database.ExecuteSqlCommand("exec DeleteById {0}", samuraiId)	
+            var samurai = _context.Samurais.Find(samuraiId);
+            _context.Remove(samurai);
+            _context.SaveChanges();
+        }
+
+        private static void DeleteMany()
+        {
+            var samurais = _context.Samurais.Where(s => s.Name.StartsWith("K"));
+            _context.Samurais.RemoveRange(samurais);
+            _context.SaveChanges();
+}
+
+        private static void DeleteWhileTracked()
+        {
+            var samurai = _context.Samurais.FirstOrDefault(s => s.Name == "Gorobei");
+            _context.Samurais.Remove(samurai);
+            _context.SaveChanges();
+        }
+
+        private static void DeleteWhileNotTracked()
+        {
+            var samurai = _context.Samurais.FirstOrDefault(s => s.Name == "Heihachi");
+            using (var contextNewAppInstance = new SamuraiContext())
+            {
+                contextNewAppInstance.Samurais.Remove(samurai);
+                contextNewAppInstance.SaveChanges();
+            }
+        }
+
+        private static void AddSomeMoreSamurais()
+        {
+            _context.AddRange(
+                new Samurai() { Name = "Kambei" },
+                new Samurai() { Name = "Shichiroji" },
+                new Samurai() { Name = "Katsushiro" },
+                new Samurai() { Name = "Heihachi" },
+                new Samurai() { Name = "Kyuzo" },
+                new Samurai() { Name = "Gorobei" }
+                );
+            _context.SaveChanges();
         }
 
         private static void QueryAndUpdateBattle_Disconnected()

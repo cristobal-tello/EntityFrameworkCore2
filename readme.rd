@@ -104,7 +104,6 @@ public static readonly LoggerFactory MyConsoleLoggerFactory =
                 .UseLoggerFactory(MyConsoleLoggerFactory)
 				.EnableSensitiveDataLogging(true)
 				...
+* Delete
 
-
-
-
+DbContext can only delete objects it is already aware of, that is, already tracker
