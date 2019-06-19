@@ -7,14 +7,37 @@ namespace App.SomeUI
 {
     class Program
     {
+        private static SamuraiContext _context = new SamuraiContext();
+
         static void Main(string[] args)
         {
             //InsertSamurai();
             //InsertMultipleSamurais();
             //InsertMultipleDifferentObjets();
-            SimpleSamuraiQuery();
+            //SimpleSamuraiQuery();
+            MoreQueries();
             Console.WriteLine("Finsihed!!!!!");
             Console.ReadKey();
+        }
+
+        private static void MoreQueries()
+        {
+            using (var context = new SamuraiContext())
+            {
+                var samurais1 = _context.Samurais.Where(s => s.Name == "John").ToList();  // Take a look sql on logger. 'John' is hardcode into the query
+
+
+                var name = "John";
+                var samurais2 = _context.Samurais.Where(s => s.Name == name).ToList();  // Take a look sql on logger. 'John' ISN'T hardcode into the query it is a parameter
+
+                // ...OrDefault methods, it returns null in case not found. The counterpart it will throw an exception
+
+                // Find an DBSet method. It is used to use a key to get a value using the key
+                // EF.Functions.Like(s.Name, "J%")
+
+
+
+            }
         }
 
         private static void InsertMultipleSamurais()
