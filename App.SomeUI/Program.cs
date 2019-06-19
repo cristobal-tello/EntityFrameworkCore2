@@ -15,9 +15,26 @@ namespace App.SomeUI
             //InsertMultipleSamurais();
             //InsertMultipleDifferentObjets();
             //SimpleSamuraiQuery();
-            MoreQueries();
+            //MoreQueries();
+            RetrieveAndUpdateSamurai();
+            RetrieveAndUpdateMultipleSamurais();
+
             Console.WriteLine("Finsihed!!!!!");
             Console.ReadKey();
+        }
+
+        private static void RetrieveAndUpdateMultipleSamurais()
+        {
+            var samurais = _context.Samurais.ToList();
+            samurais.ForEach(s => s.Name += "San");
+            _context.SaveChanges();
+        }
+
+        private static void RetrieveAndUpdateSamurai()
+        {
+            var samurai = _context.Samurais.FirstOrDefault();
+            samurai.Name += "San";
+            _context.SaveChanges();
         }
 
         private static void MoreQueries()
