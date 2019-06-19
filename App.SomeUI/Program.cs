@@ -16,11 +16,35 @@ namespace App.SomeUI
             //InsertMultipleDifferentObjets();
             //SimpleSamuraiQuery();
             //MoreQueries();
-            RetrieveAndUpdateSamurai();
-            RetrieveAndUpdateMultipleSamurais();
-
+            //RetrieveAndUpdateSamurai();
+            //RetrieveAndUpdateMultipleSamurais();
+            InsertBattle();
+            QueryAndUpdateBattle_Disconnected();
             Console.WriteLine("Finsihed!!!!!");
             Console.ReadKey();
+        }
+
+        private static void QueryAndUpdateBattle_Disconnected()
+        {
+            // Simulates a disconnected context
+            var battle = _context.Battles.FirstOrDefault();
+            battle.EndDate = new DateTime(1888, 11, 28);
+            using (var newContextInstance = new SamuraiContext())
+            {
+                newContextInstance.Battles.Update(battle);  // There is also updateRange as we did using AddRange
+                newContextInstance.SaveChanges();
+            }
+        }
+
+        private static void InsertBattle()
+        {
+            _context.Battles.Add(new Battle()
+            {
+                Name = "Battle of Ozuma",
+                StartDate = new DateTime(1560, 12, 31),
+                EndDate = new DateTime(1561, 08, 24)
+            });
+            _context.SaveChanges();
         }
 
         private static void RetrieveAndUpdateMultipleSamurais()
