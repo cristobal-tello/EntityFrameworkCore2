@@ -27,11 +27,11 @@ namespace App.SomeUI
             //DeleteMany();
             //DeleteUsingId(3);   // Make sure there is a valid id on database
 
-            //InsertNewPKFkGraph();
-            //InsertNewPkFkGraphMultipleChildren();
-            //AddChildToExistingObjectWhileTracked();
-            //AddChildToExistingObjectWhileNotTracked();  // This method will not work.
-            AddChildToExistingObjectWhileNotTracked(6); // Id of samurai. So, make sure id already exists in db
+            InsertNewPKFkGraph();
+            InsertNewPkFkGraphMultipleChildren();
+            AddChildToExistingObjectWhileTracked();
+           // AddChildToExistingObjectWhileNotTracked();  // This method will not work.
+            AddChildToExistingObjectWhileNotTracked(5); // Id of samurai. So, make sure id already exists in db
             Console.WriteLine("Finsihed!!!!!");
             Console.ReadKey();
         }
