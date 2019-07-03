@@ -1,0 +1,26 @@
+﻿<Window x:Class="App.WPFUI.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:App.WPFUI"
+        mc:Ignorable="d"
+        Title="Samurai Window" Height="450" Width="795">
+    <Grid Margin="0,0,246,24">
+        <ListBox HorizontalAlignment="Left" Height="100" Margin="26,28,0,0" VerticalAlignment="Top" Width="378"/>
+        <Button Content="New Samurai" HorizontalAlignment="Left" Margin="454,28,0,0" VerticalAlignment="Top" Width="75"/>
+        <Label Content="Name:" HorizontalAlignment="Left" Margin="26,140,0,0" VerticalAlignment="Top"/>
+        <Label Content="Real name:" HorizontalAlignment="Left" Margin="26,171,0,0" VerticalAlignment="Top"/>
+        <TextBox HorizontalAlignment="Left" Height="16" Margin="108,150,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="296"/>
+        <TextBox HorizontalAlignment="Left" Height="19" Margin="108,178,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="296"/>
+        <ListView HorizontalAlignment="Left" Height="146" Margin="39,218,0,0" VerticalAlignment="Top" Width="365">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn/>
+                </GridView>
+            </ListView.View>
+        </ListView>
+        <Button Content="Save" HorizontalAlignment="Left" Margin="454,233,0,0" VerticalAlignment="Top" Width="75" Height="20" RenderTransformOrigin="0.44,-9.9"/>
+
+    </Grid>
+</Window>
