@@ -1,5 +1,6 @@
 ﻿using App.Data;
 using App.Domain;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,13 +28,46 @@ namespace App.SomeUI
             //DeleteMany();
             //DeleteUsingId(3);   // Make sure there is a valid id on database
 
-            InsertNewPKFkGraph();
-            InsertNewPkFkGraphMultipleChildren();
-            AddChildToExistingObjectWhileTracked();
-           // AddChildToExistingObjectWhileNotTracked();  // This method will not work.
-            AddChildToExistingObjectWhileNotTracked(5); // Id of samurai. So, make sure id already exists in db
+            //InsertNewPKFkGraph();
+            //InsertNewPkFkGraphMultipleChildren();
+            //AddChildToExistingObjectWhileTracked();
+            // AddChildToExistingObjectWhileNotTracked();  // This method will not work.
+            //AddChildToExistingObjectWhileNotTracked(5); // Id of samurai. So, make sure id already exists in db
+            //EagerLoadSamuraiWithQuotes();
+            ProjectSomeProperties();
             Console.WriteLine("Finsihed!!!!!");
             Console.ReadKey();
+        }
+
+        // Define the shape of the query results (Query projections)
+        private static void ProjectSomeProperties()
+        {
+            var someProperties = _context.Samurais.Select(s => new { s.Id, s.Name }).ToList();
+
+            var somePropertiesWithQuotes = _context.Samurais.Select(s => new { s.Id, s.Name, s.Quotes }).ToList();
+
+            var somePropertesWithHappyQuotes = _context.Samurais.Select(s => new { s.Id, s.Name, HappyQuotes = s.Quotes.Where(q => q.Text.Contains("happy")) }).ToList();
+
+            var somePropertesWithHappySamuraiAndQuotes = _context.Samurais.Select(s => new { Samurai = s, Quotes = s.Quotes.Where(q => q.Text.Contains("happy")) }).ToList();   // Course said this line will not work, but it does.
+
+            var samurais = _context.Samurais.ToList();          // Right way, do it in 2 parts, this is the first one
+            var happyQuotes = _context.Quotes.Where(q => q.Text.Contains("happy")).ToList();    // This is the second one
+        }
+
+        
+        // Include related objects in query (Eager Loading)
+        private static void EagerLoadSamuraiWithQuotes()
+        {
+            var samuraiWithQuotes = _context.Samurais.Include(s => s.Quotes).ToList();
+
+            // Ways to use Include
+            _context.Samurais.Include(s => s.Quotes);   // Include chid objects
+
+            // _context.Samurais.Include(s => s.Quotes).ThenInclude(q => q.Translations);   // This is just an example (Include children and grand-children)
+
+            // _context.Samurais.Include(s => s.Quotes.Translations);      // Include just grandchildren
+
+            _context.Samurais.Include(s => s.Quotes).Include(s => s.SecretIdentity);    // Include different children
         }
 
         // This is the right method, use FK
