@@ -34,9 +34,17 @@ namespace App.SomeUI
             // AddChildToExistingObjectWhileNotTracked();  // This method will not work.
             //AddChildToExistingObjectWhileNotTracked(5); // Id of samurai. So, make sure id already exists in db
             //EagerLoadSamuraiWithQuotes();
-            ProjectSomeProperties();
+            //ProjectSomeProperties();
+            FilteringWithRelatedData();
             Console.WriteLine("Finsihed!!!!!");
             Console.ReadKey();
+        }
+
+        private static void FilteringWithRelatedData()
+        {
+            var happySamurais = _context.Samurais
+                                    .Where(s => s.Quotes.Any(q => q.Text.Contains("happy")))
+                                    .ToList();
         }
 
         // Define the shape of the query results (Query projections)
