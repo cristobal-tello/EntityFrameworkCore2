@@ -1,6 +1,7 @@
 ﻿using App.Data;
 using App.Domain;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace App.SomeUI
@@ -20,13 +21,94 @@ namespace App.SomeUI
             //RetrieveAndUpdateMultipleSamurais();
             //InsertBattle();
             //QueryAndUpdateBattle_Disconnected();
-            AddSomeMoreSamurais();
-            DeleteWhileTracked();
-            DeleteWhileNotTracked();
-            DeleteMany();
-            DeleteUsingId(3);   // Make sure there is a valid id on database
+            //AddSomeMoreSamurais();
+            //DeleteWhileTracked();
+            //DeleteWhileNotTracked();
+            //DeleteMany();
+            //DeleteUsingId(3);   // Make sure there is a valid id on database
+
+            //InsertNewPKFkGraph();
+            //InsertNewPkFkGraphMultipleChildren();
+            //AddChildToExistingObjectWhileTracked();
+            //AddChildToExistingObjectWhileNotTracked();  // This method will not work.
+            AddChildToExistingObjectWhileNotTracked(6); // Id of samurai. So, make sure id already exists in db
             Console.WriteLine("Finsihed!!!!!");
             Console.ReadKey();
+        }
+
+        // This is the right method, use FK
+        private static void AddChildToExistingObjectWhileNotTracked(int samuraiId)
+        {
+            var quote = new Quote
+            {
+                Text = "Now that I saved you, will you feed me dinner?",
+                SamuraiId = samuraiId
+            };
+
+            using (var newContext = new SamuraiContext())
+            {
+                newContext.Quotes.Add(quote);
+                newContext.SaveChanges();
+            }
+        }
+
+
+        // This method will not work as we expect
+        // New context doesn't know how to match Samurais and Quotes
+        // Also the samurai it's already in database
+        private static void AddChildToExistingObjectWhileNotTracked()
+        {
+            var samurai = _context.Samurais.First();
+            samurai.Quotes.Add(new Quote
+            {
+                Text = "Now that I saved you, will you feed me dinner?"
+            });
+
+            using (var newContext = new SamuraiContext())
+            {
+                newContext.Samurais.Add(samurai);   // Nope.
+                newContext.SaveChanges();
+            }
+        }
+
+        private static void InsertNewPKFkGraph()
+        {
+            var samurai = new Samurai
+            {
+                Name = "Kambei Shimada",
+                Quotes = new List<Quote>
+                {
+                    new Quote { Text = "I've come to save you" }
+                }
+            };
+
+            _context.Samurais.Add(samurai);
+            _context.SaveChanges();
+        }
+
+        private static void InsertNewPkFkGraphMultipleChildren()
+        {
+            var samurai = new Samurai
+                {
+                    Name = "Kyuzo",
+                    Quotes = new List<Quote>
+                    {
+                        new Quote {Text="Watch out for my sharp sword!"},
+                        new Quote {Text="I told you watch out for the sharp sword! Oh well!"}
+                    }
+                };
+            _context.Samurais.Add(samurai);
+            _context.SaveChanges();
+        }
+
+        private static void AddChildToExistingObjectWhileTracked()
+        {
+            var samurai = _context.Samurais.First();
+            samurai.Quotes.Add(new Quote
+                {
+                    Text = "I bet you're happy that I've saved you!"
+                });
+            _context.SaveChanges();
         }
 
         private static void DeleteUsingId(int samuraiId)
