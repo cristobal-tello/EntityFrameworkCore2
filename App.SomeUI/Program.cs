@@ -35,9 +35,34 @@ namespace App.SomeUI
             //AddChildToExistingObjectWhileNotTracked(5); // Id of samurai. So, make sure id already exists in db
             //EagerLoadSamuraiWithQuotes();
             //ProjectSomeProperties();
-            FilteringWithRelatedData();
+            //FilteringWithRelatedData();
+            ModifyingRelatedDataWhenTracked();
+            ModifyingRelatedDataWhenNotTracked();
             Console.WriteLine("Finsihed!!!!!");
             Console.ReadKey();
+        }
+
+        private static void ModifyingRelatedDataWhenTracked()
+        {
+            var samurai = _context.Samurais.Include(s => s.Quotes).FirstOrDefault();
+            samurai.Quotes[0].Text += ". Really?";
+            // Even you can delete. No problem
+            _context.SaveChanges();
+        }
+
+        private static void ModifyingRelatedDataWhenNotTracked()
+        {
+            var samurai = _context.Samurais.Include(s => s.Quotes).FirstOrDefault();
+
+            var quote = samurai.Quotes[0];
+            quote.Text += ". Are you serious?";
+
+            using (var newContext = new SamuraiContext())
+            {
+                // newContext.Quotes.Add(quote);       // Take a look the log/exception, it doesn't work as we expect
+                newContext.Entry(quote).State = EntityState.Modified;
+                newContext.SaveChanges();
+            }
         }
 
         private static void FilteringWithRelatedData()
