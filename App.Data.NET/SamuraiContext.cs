@@ -23,14 +23,16 @@ namespace App.Data
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
+            // From config
+            //var connectionString = ConfigurationManager.ConnectionString["XXXX"].ToString();
             optionsBuilder
-                .EnableSensitiveDataLogging(true)
                 .UseSqlServer("Server = (localdb)\\mssqllocaldb; Database=SamuraiAppData; Trusted_Connection=True");
         }
 
         public DbSet<Samurai> Samurais { get; set; }
-        public DbSet<Quote> Quotes { get; set; }
         public DbSet<Battle> Battles { get; set; }
+        public DbSet<Quote> Quotes { get; set; }
+        public DbSet<SamuraiBattle> SamuraiBattles { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
