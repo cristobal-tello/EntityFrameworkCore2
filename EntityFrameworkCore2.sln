@@ -18,6 +18,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "App.Web", "App.Web\App.Web.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "App.ReverseEngineeringDB", "App.ReverseEngineeringDB\App.ReverseEngineeringDB.csproj", "{B6538BA3-D4B3-4048-B419-B021FA96AB25}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "App.WebMVC", "App.WebMVC\App.WebMVC.csproj", "{01A3946C-1CB2-47CF-ACEC-00CE5AD0304B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -44,6 +46,10 @@ Global
 		{B6538BA3-D4B3-4048-B419-B021FA96AB25}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B6538BA3-D4B3-4048-B419-B021FA96AB25}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B6538BA3-D4B3-4048-B419-B021FA96AB25}.Release|Any CPU.Build.0 = Release|Any CPU
+		{01A3946C-1CB2-47CF-ACEC-00CE5AD0304B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{01A3946C-1CB2-47CF-ACEC-00CE5AD0304B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{01A3946C-1CB2-47CF-ACEC-00CE5AD0304B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{01A3946C-1CB2-47CF-ACEC-00CE5AD0304B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
