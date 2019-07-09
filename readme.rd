@@ -106,4 +106,4 @@ public static readonly LoggerFactory MyConsoleLoggerFactory =
 				...
 * Delete
 
-DbContext can only delete objects it is already aware of, that is, already tracker
+DbContext can only delete objects it is already aware of, that is, already track it
