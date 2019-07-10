@@ -7,6 +7,7 @@ namespace App.Domain
         public Samurai()
         {
             this.Quotes = new List<Quote>();
+            this.SecretIdentity = new SecretIdentity();
         }
 
         public int Id { get; set; }

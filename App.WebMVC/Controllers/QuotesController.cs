@@ -10,22 +10,23 @@ using App.Domain;
 
 namespace App.WebMVC.Controllers
 {
-    public class SamuraisController : Controller
+    public class QuotesController : Controller
     {
         private readonly SamuraiContext _context;
 
-        public SamuraisController(SamuraiContext context)
+        public QuotesController(SamuraiContext context)
         {
             _context = context;
         }
 
-        // GET: Samurais
+        // GET: Quotes
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Samurais.ToListAsync());
+            var samuraiContext = _context.Quotes.Include(q => q.Samurai);
+            return View(await samuraiContext.ToListAsync());
         }
 
-        // GET: Samurais/Details/5
+        // GET: Quotes/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -33,39 +34,42 @@ namespace App.WebMVC.Controllers
                 return NotFound();
             }
 
-            var samurai = await _context.Samurais.Include(s=>s.SecretIdentity).Include(s => s.Quotes)
-                .SingleOrDefaultAsync(m => m.Id == id);
-            if (samurai == null)
+            var quote = await _context.Quotes
+                .Include(q => q.Samurai)
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (quote == null)
             {
                 return NotFound();
             }
 
-            return View(samurai);
+            return View(quote);
         }
 
-        // GET: Samurais/Create
-        public IActionResult Create()
+        // GET: Quotes/Create
+        public IActionResult Create(int samuraiId)
         {
+            ViewData["SamuraiId"] = new SelectList(_context.Samurais, "Id", "Name", samuraiId);
             return View();
         }
 
-        // POST: Samurais/Create
+        // POST: Quotes/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name")] Samurai samurai)
+        public async Task<IActionResult> Create([Bind("Id,Text,SamuraiId")] Quote quote)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(samurai);
+                _context.Add(quote);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(samurai);
+            ViewData["SamuraiId"] = new SelectList(_context.Samurais, "Id", "Id", quote.SamuraiId);
+            return View(quote);
         }
 
-        // GET: Samurais/Edit/5
+        // GET: Quotes/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -73,23 +77,30 @@ namespace App.WebMVC.Controllers
                 return NotFound();
             }
 
-            var samurai = await _context.Samurais.Include(s=>s.SecretIdentity)
-                                                    .Include(s=>s.Quotes).SingleOrDefaultAsync(m=> m.Id==id);
-            if (samurai == null)
+            var quote = await _context.Quotes.FindAsync(id);
+            if (quote == null)
             {
                 return NotFound();
             }
-            return View(samurai);
+
+            var newSource = _context.Samurais.Select(s => new SelectListItem
+            {
+                Value = s.Id.ToString(),
+                Text = string.Format($"{s.Name} ({s.Id})")
+            });
+            //ViewData["SamuraiId"] = new SelectList(_context.Samurais, "Id", "Name", quote.SamuraiId); // It's works, but it only show Samurai Name
+            ViewData["SamuraiId"] = new SelectList(newSource, "Value", "Text");
+            return View(quote);
         }
 
-        // POST: Samurais/Edit/5
+        // POST: Quotes/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, Samurai samurai)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Text,SamuraiId")] Quote quote)
         {
-            if (id != samurai.Id)
+            if (id != quote.Id)
             {
                 return NotFound();
             }
@@ -98,12 +109,12 @@ namespace App.WebMVC.Controllers
             {
                 try
                 {
-                    _context.Update(samurai);
+                    _context.Update(quote);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!SamuraiExists(samurai.Id))
+                    if (!QuoteExists(quote.Id))
                     {
                         return NotFound();
                     }
@@ -114,10 +125,11 @@ namespace App.WebMVC.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(samurai);
+            ViewData["SamuraiId"] = new SelectList(_context.Samurais, "Id", "Id", quote.SamuraiId);
+            return View(quote);
         }
 
-        // GET: Samurais/Delete/5
+        // GET: Quotes/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -125,30 +137,31 @@ namespace App.WebMVC.Controllers
                 return NotFound();
             }
 
-            var samurai = await _context.Samurais
+            var quote = await _context.Quotes
+                .Include(q => q.Samurai)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (samurai == null)
+            if (quote == null)
             {
                 return NotFound();
             }
 
-            return View(samurai);
+            return View(quote);
         }
 
-        // POST: Samurais/Delete/5
+        // POST: Quotes/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var samurai = await _context.Samurais.FindAsync(id);
-            _context.Samurais.Remove(samurai);
+            var quote = await _context.Quotes.FindAsync(id);
+            _context.Quotes.Remove(quote);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool SamuraiExists(int id)
+        private bool QuoteExists(int id)
         {
-            return _context.Samurais.Any(e => e.Id == id);
+            return _context.Quotes.Any(e => e.Id == id);
         }
     }
 }

@@ -13,10 +13,16 @@
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="SecretIdentity.Id" />
+            <input type="hidden" asp-for="SecretIdentity.SamuraiId" />
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
                 <input asp-for="Name" class="form-control" />
                 <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SecretIdentity.RealName" class="control-label"></label>
+                <input asp-for="SecretIdentity.RealName" class="form-control" />
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
@@ -25,8 +31,27 @@
     </div>
 </div>
 
+<hr style=" border-style:solid; border-width: 1.5px;" />
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Text</th>
+            <th></th>
+        </tr>
+    </thead>
+    @foreach (var item in Model.Quotes)
+    {
+        <tr>
+            <td>@item.Text </td>
+            <td> @Html.ActionLink("Editar", "Edit", "Quotes", new { id = item.Id, samuraiId = item.SamuraiId }, null)</td>
+        </tr>
+    }
+</table>
 <div>
-    <a asp-action="Index">Back to List</a>
+
+    @Html.ActionLink("New Quote", "Create", "Quotes", new { samuraiId = Model.Id }, null)  |
+    <a asp-action="Index">Back to Samurais List</a>
 </div>
 
 @section Scripts {
